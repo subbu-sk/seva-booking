@@ -192,5 +192,14 @@
             "subtitle": "Manage slides and content for the homepage carousel",
             "save_success": "Hero slides updated successfully"
         }
+    },
+    "footer": {
+        "about_temple": "About Temple",
+        "quick_links": "Quick Links",
+        "contact_us": "Contact Us",
+        "connect": "Connect With Us",
+        "all_rights_reserved": "All Rights Reserved",
+        "privacy_policy": "Privacy Policy",
+        "terms_service": "Terms of Service"
     }
 }

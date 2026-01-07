@@ -1,6 +1,7 @@
 import { Routes, Route, Outlet } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
 import Navbar from './components/common/Navbar'
+import Footer from './components/common/Footer'
 import BackgroundWrapper from './components/common/BackgroundWrapper'
 
 // Pages
@@ -38,7 +39,7 @@ function App() {
             <Suspense fallback={<PageLoader />}>
                 <Routes>
                     {/* User Routes */}
-                    <Route element={<BackgroundWrapper><Navbar /><div className="pt-4"><Outlet /></div></BackgroundWrapper>}>
+                    <Route element={<BackgroundWrapper><Navbar /><div className="pt-4 min-h-[70vh]"><Outlet /></div><Footer /></BackgroundWrapper>}>
                         <Route path="/" element={<Home />} />
                         <Route path="/sevas" element={<SevaListing />} />
                         <Route path="/sevas/:id" element={<SevaDetails />} />

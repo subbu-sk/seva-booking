@@ -64,7 +64,7 @@ const createBooking = asyncHandler(async (req, res) => {
 // @route   GET /api/bookings/mybookings
 // @access  Private
 const getMyBookings = asyncHandler(async (req, res) => {
-    const bookings = await Booking.find({ user: req.user._id }).populate('seva', 'title templeName location');
+    const bookings = await Booking.find({ user: req.user._id }).populate('seva', 'titleEn titleKn templeNameEn templeNameKn locationEn locationKn');
     res.json(bookings);
 });
 
@@ -72,7 +72,7 @@ const getMyBookings = asyncHandler(async (req, res) => {
 // @route   GET /api/bookings
 // @access  Private/Admin
 const getBookings = asyncHandler(async (req, res) => {
-    const bookings = await Booking.find({}).populate('user', 'id name email').populate('seva', 'title templeName location');
+    const bookings = await Booking.find({}).populate('user', 'id name email').populate('seva', 'titleEn titleKn templeNameEn templeNameKn locationEn locationKn');
     res.json(bookings);
 });
 

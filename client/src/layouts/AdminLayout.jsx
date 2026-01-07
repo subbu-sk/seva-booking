@@ -52,10 +52,12 @@ const AdminLayout = () => {
     };
 
     const navItems = [
+        { name: t('admin.layout.dashboard'), path: '/admin', icon: LayoutDashboard },
         { name: t('admin.layout.sankalpa_list'), path: '/admin/sankalpa', icon: Users },
         { name: t('admin.layout.seva_management'), path: '/admin/sevas', icon: FileText },
         { name: t('admin.layout.hero_management'), path: '/admin/hero', icon: Image },
         { name: t('admin.layout.settings'), path: '/admin/settings', icon: Settings },
+        { name: t('nav.my_bookings'), path: '/bookings', icon: BookOpen },
     ];
 
     return (

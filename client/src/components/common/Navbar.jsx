@@ -66,6 +66,30 @@ const Navbar = () => {
                             >
                                 {t('nav.book_seva')}
                             </Link>
+
+                            {isAuthenticated && (
+                                <Link
+                                    to="/bookings"
+                                    className={`px-3 xl:px-4 py-2 rounded-full text-xs xl:text-sm font-bold transition-all ${location.pathname === '/bookings'
+                                        ? 'bg-orange-600 text-white shadow-md shadow-orange-200'
+                                        : 'text-gray-600 hover:bg-orange-50 hover:text-orange-600'
+                                        }`}
+                                >
+                                    {t('nav.my_bookings')}
+                                </Link>
+                            )}
+
+                            {isAuthenticated && user?.role === 'admin' && (
+                                <Link
+                                    to="/admin"
+                                    className={`px-3 xl:px-4 py-2 rounded-full text-xs xl:text-sm font-bold transition-all ${location.pathname.startsWith('/admin')
+                                        ? 'bg-orange-600 text-white shadow-md shadow-orange-200'
+                                        : 'text-gray-600 hover:bg-orange-50 hover:text-orange-600'
+                                        }`}
+                                >
+                                    Dashboard
+                                </Link>
+                            )}
                         </div>
 
                         {/* Language Switcher */}

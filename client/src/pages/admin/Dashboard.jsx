@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'react-hot-toast';
 
 const Dashboard = () => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const [stats, setStats] = useState({
         revenue: 0,
         bookings: 0,
@@ -107,7 +107,7 @@ const Dashboard = () => {
             </div>
 
             {/* Quick Actions */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <Link to="/" className="flex items-center p-6 bg-white rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow group">
                     <div className="p-3 bg-blue-50 text-blue-600 rounded-xl group-hover:bg-blue-600 group-hover:text-white transition-colors">
                         <Home className="w-6 h-6" />
@@ -124,6 +124,15 @@ const Dashboard = () => {
                     <div className="ml-4">
                         <h3 className="font-bold text-gray-900">{t('nav.book_seva', 'Book Seva')}</h3>
                         <p className="text-sm text-gray-500">Create a new booking</p>
+                    </div>
+                </Link>
+                <Link to="/bookings" className="flex items-center p-6 bg-white rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow group">
+                    <div className="p-3 bg-purple-50 text-purple-600 rounded-xl group-hover:bg-purple-600 group-hover:text-white transition-colors">
+                        <Calendar className="w-6 h-6" />
+                    </div>
+                    <div className="ml-4">
+                        <h3 className="font-bold text-gray-900">{t('nav.my_bookings', 'My Bookings')}</h3>
+                        <p className="text-sm text-gray-500">View your personal bookings</p>
                     </div>
                 </Link>
             </div>
@@ -155,7 +164,9 @@ const Dashboard = () => {
                                             <div className="text-xs text-gray-400">{booking.gothram}</div>
                                         </td>
                                         <td className="px-6 py-4">
-                                            <div className="font-medium text-gray-700">{booking.seva?.title || 'Seva'}</div>
+                                            <div className="font-medium text-gray-700">
+                                                {i18n.language === 'kn' ? (booking.seva?.titleKn || booking.seva?.titleEn || booking.seva?.title || 'Seva') : (booking.seva?.titleEn || booking.seva?.titleKn || booking.seva?.title || 'Seva')}
+                                            </div>
                                         </td>
                                         <td className="px-6 py-4 font-bold text-gray-900">₹{booking.totalAmount}</td>
                                         <td className="px-6 py-4">
