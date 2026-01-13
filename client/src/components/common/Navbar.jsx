@@ -67,7 +67,7 @@ const Navbar = () => {
                                 {t('nav.book_seva')}
                             </Link>
 
-                            {isAuthenticated && (
+                            {isAuthenticated && user?.role === 'admin' && (
                                 <Link
                                     to="/bookings"
                                     className={`px-3 xl:px-4 py-2 rounded-full text-xs xl:text-sm font-bold transition-all ${location.pathname === '/bookings'
@@ -102,7 +102,7 @@ const Navbar = () => {
                             <span className="xl:hidden">{i18n?.language === 'en' ? 'KN' : 'EN'}</span>
                         </button>
 
-                        {isAuthenticated && user ? (
+                        {isAuthenticated && user && (
                             <div className="relative">
                                 <button
                                     onClick={() => setIsProfileOpen(!isProfileOpen)}
@@ -145,18 +145,6 @@ const Navbar = () => {
                                         </button>
                                     </div>
                                 )}
-                            </div>
-                        ) : (
-                            <div className="flex items-center space-x-2 xl:space-x-3 pl-1 xl:pl-2">
-                                <Link to="/login" className="relative z-50 cursor-pointer text-gray-600 hover:text-orange-600 font-bold text-xs xl:text-sm px-2 xl:px-4">
-                                    {t('nav.login')}
-                                </Link>
-                                <Link
-                                    to="/register"
-                                    className="relative z-50 cursor-pointer bg-orange-600 text-white px-4 xl:px-6 py-2 xl:py-2.5 rounded-full text-xs xl:text-sm font-black hover:bg-orange-700 shadow-lg shadow-orange-200 transition-all active:scale-95"
-                                >
-                                    {t('nav.register')}
-                                </Link>
                             </div>
                         )}
                     </div>
@@ -201,7 +189,7 @@ const Navbar = () => {
                                 {t('nav.book_seva')}
                             </Link>
 
-                            {isAuthenticated && (
+                            {isAuthenticated && user?.role === 'admin' && (
                                 <>
                                     <Link
                                         to="/bookings"
@@ -217,25 +205,6 @@ const Navbar = () => {
                                         <LogOut className="w-4 h-4 mr-2" />
                                         {t('nav.logout')}
                                     </button>
-                                </>
-                            )}
-
-                            {!isAuthenticated && (
-                                <>
-                                    <Link
-                                        to="/login"
-                                        onClick={() => setIsOpen(false)}
-                                        className="block px-3 py-2 text-gray-700 font-bold"
-                                    >
-                                        {t('nav.login')}
-                                    </Link>
-                                    <Link
-                                        to="/register"
-                                        onClick={() => setIsOpen(false)}
-                                        className="block px-3 py-2 bg-orange-600 text-white rounded-md text-base font-bold text-center"
-                                    >
-                                        {t('nav.register')}
-                                    </Link>
                                 </>
                             )}
                         </div>

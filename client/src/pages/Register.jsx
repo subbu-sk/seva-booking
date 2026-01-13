@@ -24,7 +24,12 @@ const Register = () => {
     const { loading, error, isAuthenticated } = useSelector((state) => state.auth);
 
     useEffect(() => {
+        // Redirect regular users away from registration as login flow is removed for devotees
         if (isAuthenticated) {
+            navigate('/');
+        } else {
+            // For unauthenticated users, also redirect to home since registration is now closed for devotees
+            // Note: Admins are usually already registered or handled separately.
             navigate('/');
         }
         if (error) {

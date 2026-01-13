@@ -16,9 +16,9 @@ const bookingSchema = mongoose.Schema(
             ref: 'Seva',
         },
         devoteeName: { type: String, required: true },
-        gothram: { type: String, required: true },
-        rashi: { type: String, required: true },
-        nakshatra: { type: String, required: true },
+        gothram: { type: String, required: false },
+        rashi: { type: String, required: false },
+        nakshatra: { type: String, required: false },
         bookingDate: { type: Date, default: Date.now },
         bookingType: { type: String, required: true }, // individual, family
         count: { type: Number, default: 1 },

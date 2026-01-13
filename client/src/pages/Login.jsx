@@ -83,12 +83,6 @@ const Login = () => {
                     </button>
                 </form>
 
-                <p className="mt-6 text-center text-sm text-gray-600">
-                    {t('auth.no_account')}{' '}
-                    <Link to="/register" className="text-orange-600 font-medium hover:underline">
-                        {t('auth.submit_register')}
-                    </Link>
-                </p>
             </div>
         </div>
     );

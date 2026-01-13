@@ -1,28 +1,88 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight } from 'lucide-react';
+import { Search, Phone, History, ArrowRight, Loader2 } from 'lucide-react';
 import HeroCarousel from '../components/home/HeroCarousel';
 import SearchBar from '../components/home/SearchBar';
+import BookingLookupModal from '../components/home/BookingLookupModal';
 import { useTranslation } from 'react-i18next';
+import api from '../utils/api';
+import { toast } from 'react-hot-toast';
 
 const Home = () => {
     const { t } = useTranslation();
-    const [temples, setTemples] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [trackPhone, setTrackPhone] = useState('');
+    const [isTracking, setIsTracking] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [foundBookings, setFoundBookings] = useState([]);
     const navigate = useNavigate();
+
+    const handleTrackBooking = async (e) => {
+        if (e) e.preventDefault();
+
+        const phoneToTrack = trackPhone;
+        if (!phoneToTrack || phoneToTrack.length < 10) {
+            toast.error("Please enter a valid 10-digit mobile number");
+            return;
+        }
+
+        setIsTracking(true);
+        try {
+            const { data } = await api.get(`/bookings/track/${phoneToTrack}`);
+            if (data && data.length > 0) {
+                setFoundBookings(data);
+                setIsModalOpen(true);
+            } else {
+                setFoundBookings([]);
+                setIsModalOpen(false);
+                // Silence for first-time users as requested
+            }
+        } catch (error) {
+            console.error(error);
+            // Only show error for actual server/connection issues, not "not found"
+            if (error.response?.status !== 404) {
+                toast.error("Failed to fetch bookings. Please try again.");
+            }
+        } finally {
+            setIsTracking(false);
+        }
+    };
+
+    // Auto-trigger search on 10 digits
+    React.useEffect(() => {
+        if (trackPhone.length === 10) {
+            handleTrackBooking();
+        }
+    }, [trackPhone]);
 
     return (
         <div className="pb-20 bg-gray-50 min-h-screen">
             {/* Hero Section */}
-            <section className="px-4 mb-16 pt-6">
+            <section className="px-4 mb-8 pt-6">
                 <HeroCarousel />
-                <div className="-mt-8 relative z-10">
+                <div className="-mt-8 relative z-10 space-y-4">
+                    {/* Simplified Track Booking Search */}
+                    <div className="max-w-4xl mx-auto">
+                        <form onSubmit={handleTrackBooking} className="bg-white p-2 md:p-3 rounded-3xl shadow-xl border border-gray-100 flex flex-col md:flex-row items-center gap-2">
+                            <div className="flex-1 flex items-center px-4 w-full">
+                                <Phone className="text-orange-600 w-5 h-5 mr-3" />
+                                <input
+                                    type="tel"
+                                    placeholder="Enter Mobile Number"
+                                    className="w-full py-3 outline-none text-gray-700 font-medium placeholder:text-gray-400"
+                                    value={trackPhone}
+                                    onChange={(e) => setTrackPhone(e.target.value)}
+                                />
+                                {isTracking && <Loader2 className="w-5 h-5 animate-spin text-orange-600 ml-2" />}
+                            </div>
+                        </form>
+                    </div>
+
                     <SearchBar />
                 </div>
             </section>
 
             {/* Featured Section */}
-            <section className="container mx-auto px-4 max-w-7xl">
+            <section className="container mx-auto px-4 max-w-7xl mt-16">
                 <div className="mb-10 text-center">
                     <h3 className="text-3xl font-bold text-gray-800 mb-2">
                         {t('home.featured_title')}
@@ -60,6 +120,14 @@ const Home = () => {
                     </div>
                 </div>
             </section>
+
+            {/* Booking Lookup Modal */}
+            <BookingLookupModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                bookings={foundBookings}
+                phone={trackPhone}
+            />
         </div>
     );
 };

@@ -116,4 +116,14 @@ const deleteBooking = asyncHandler(async (req, res) => {
     }
 });
 
-module.exports = { createBooking, getMyBookings, getBookings, updateBooking, deleteBooking };
+// @desc    Get bookings by guest phone number
+// @route   GET /api/bookings/track/:phone
+// @access  Public
+const getBookingsByPhone = asyncHandler(async (req, res) => {
+    const bookings = await Booking.find({ guestPhone: req.params.phone })
+        .populate('seva', 'titleEn titleKn templeNameEn templeNameKn locationEn locationKn image')
+        .sort('-createdAt');
+    res.json(bookings);
+});
+
+module.exports = { createBooking, getMyBookings, getBookings, updateBooking, deleteBooking, getBookingsByPhone };

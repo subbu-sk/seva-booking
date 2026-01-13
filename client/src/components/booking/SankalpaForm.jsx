@@ -17,7 +17,7 @@ const NAKSHATRAS = [
 
 import { useTranslation } from 'react-i18next';
 
-const SankalpaForm = ({ formData, handleChange, isAuthenticated, selectedDate, setSelectedDate }) => {
+const SankalpaForm = ({ formData, handleChange, isAuthenticated, selectedDate, setSelectedDate, errors = {} }) => {
     const { t } = useTranslation();
     const today = new Date().toISOString().split('T')[0];
     return (
@@ -30,7 +30,7 @@ const SankalpaForm = ({ formData, handleChange, isAuthenticated, selectedDate, s
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* Date Selection */}
                 <div>
-                    <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1">{t('seva_details.select_date', 'Select Date')} *</label>
+                    <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1">{t('seva_details.select_date', 'Select Date')}</label>
                     <div className="relative">
                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <Clock className="h-4 w-4 text-orange-600" />
@@ -41,7 +41,7 @@ const SankalpaForm = ({ formData, handleChange, isAuthenticated, selectedDate, s
                             min={today}
                             onChange={(e) => setSelectedDate(e.target.value)}
                             className="w-full pl-10 px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-sm font-medium bg-white shadow-sm"
-                            required
+
                         />
                     </div>
                 </div>
@@ -55,14 +55,14 @@ const SankalpaForm = ({ formData, handleChange, isAuthenticated, selectedDate, s
                         value={formData.name}
                         onChange={handleChange}
                         placeholder={t('auth.name')}
-                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-sm font-medium shadow-sm transition-all"
+                        className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-sm font-medium shadow-sm transition-all ${errors.name ? 'border-red-500 bg-red-50' : 'border-gray-200'}`}
                         required
                     />
                 </div>
 
                 {/* Gothram */}
                 <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">{t('sankalpa.gothram')} *</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">{t('sankalpa.gothram')}</label>
                     <input
                         type="text"
                         name="gothram"
@@ -70,19 +70,19 @@ const SankalpaForm = ({ formData, handleChange, isAuthenticated, selectedDate, s
                         onChange={handleChange}
                         placeholder="e.g., Kashyapa"
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500"
-                        required
+
                     />
                 </div>
 
                 {/* Rashi */}
                 <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">{t('sankalpa.rashi')} *</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">{t('sankalpa.rashi')}</label>
                     <select
                         name="rashi"
                         value={formData.rashi}
                         onChange={handleChange}
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500 bg-white"
-                        required
+
                     >
                         <option value="">Select Rashi</option>
                         {RASHIS.map(r => <option key={r} value={r}>{r}</option>)}
@@ -91,13 +91,13 @@ const SankalpaForm = ({ formData, handleChange, isAuthenticated, selectedDate, s
 
                 {/* Nakshatra */}
                 <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">{t('sankalpa.nakshatra')} *</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">{t('sankalpa.nakshatra')}</label>
                     <select
                         name="nakshatra"
                         value={formData.nakshatra}
                         onChange={handleChange}
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500 bg-white"
-                        required
+
                     >
                         <option value="">Select Nakshatra</option>
                         {NAKSHATRAS.map(n => <option key={n} value={n}>{n}</option>)}
@@ -110,7 +110,7 @@ const SankalpaForm = ({ formData, handleChange, isAuthenticated, selectedDate, s
                             <h4 className="text-sm font-bold text-orange-800 mb-3">Contact Information (for receipt)</h4>
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Your Name *</label>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Your Name</label>
                             <input
                                 type="text"
                                 name="guestName"
@@ -118,11 +118,11 @@ const SankalpaForm = ({ formData, handleChange, isAuthenticated, selectedDate, s
                                 onChange={handleChange}
                                 placeholder="Your Full Name"
                                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500"
-                                required
+
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Email Address *</label>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
                             <input
                                 type="email"
                                 name="guestEmail"
@@ -130,18 +130,18 @@ const SankalpaForm = ({ formData, handleChange, isAuthenticated, selectedDate, s
                                 onChange={handleChange}
                                 placeholder="email@example.com"
                                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500"
-                                required
+
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number *</label>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Mobile Number *</label>
                             <input
                                 type="tel"
                                 name="guestPhone"
                                 value={formData.guestPhone}
                                 onChange={handleChange}
                                 placeholder="10-digit mobile number"
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500"
+                                className={`w-full px-3 py-2 border rounded-md focus:ring-orange-500 focus:border-orange-500 ${errors.guestPhone ? 'border-red-500 bg-red-50' : 'border-gray-300'}`}
                                 required
                             />
                         </div>

@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { Calendar, MapPin, Clock, Download, ArrowLeft, Loader2 } from 'lucide-react';
 import api from '../utils/api';
 import { toast } from 'react-hot-toast';
@@ -10,10 +10,18 @@ import { useTranslation } from 'react-i18next';
 
 const Bookings = () => {
     const { t, i18n } = useTranslation();
+    const navigate = useNavigate();
     const [bookings, setBookings] = useState([]);
     const [loading, setLoading] = useState(true);
+    const { user, isAuthenticated } = useSelector((state) => state.auth);
 
     useEffect(() => {
+        // Redirect if not admin - devotee login flow is removed
+        if (!isAuthenticated || user?.role !== 'admin') {
+            navigate('/');
+            return;
+        }
+
         const fetchBookings = async () => {
             try {
                 const response = await api.get('/bookings/mybookings');

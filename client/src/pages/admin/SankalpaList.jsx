@@ -263,7 +263,6 @@ const SankalpaList = () => {
                                         value={editFormData.gothram}
                                         onChange={(e) => setEditFormData({ ...editFormData, gothram: e.target.value })}
                                         className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 outline-none"
-                                        required
                                     />
                                 </div>
                                 <div>
@@ -273,7 +272,6 @@ const SankalpaList = () => {
                                         value={editFormData.rashi}
                                         onChange={(e) => setEditFormData({ ...editFormData, rashi: e.target.value })}
                                         className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 outline-none"
-                                        required
                                     />
                                 </div>
                             </div>
@@ -285,7 +283,6 @@ const SankalpaList = () => {
                                         value={editFormData.nakshatra}
                                         onChange={(e) => setEditFormData({ ...editFormData, nakshatra: e.target.value })}
                                         className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 outline-none"
-                                        required
                                     />
                                 </div>
                                 <div>

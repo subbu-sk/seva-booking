@@ -13,9 +13,12 @@ import {
 import { useTranslation } from 'react-i18next';
 import api from '../../utils/api';
 
+import { useSelector } from 'react-redux';
+
 const Footer = () => {
     const { t, i18n } = useTranslation();
     const [settings, setSettings] = useState(null);
+    const { user, isAuthenticated } = useSelector((state) => state.auth);
 
     useEffect(() => {
         const fetchSettings = async () => {
@@ -30,6 +33,18 @@ const Footer = () => {
     }, []);
 
     const currentYear = new Date().getFullYear();
+
+    const quickLinks = [
+        { name: t('nav.home'), path: "/" },
+        { name: t('nav.book_seva'), path: "/sevas" },
+        { name: t('footer.privacy_policy'), path: "#" },
+        { name: t('footer.terms_service'), path: "#" }
+    ];
+
+    // Only add My Bookings for admins
+    if (isAuthenticated && user?.role === 'admin') {
+        quickLinks.splice(2, 0, { name: t('nav.my_bookings'), path: "/bookings" });
+    }
 
     return (
         <footer className="bg-gray-900 text-gray-300 pt-10 pb-6 border-t border-gray-800">
@@ -71,13 +86,7 @@ const Footer = () => {
                     <div className="space-y-4">
                         <h4 className="text-white font-bold text-lg">{t('footer.quick_links')}</h4>
                         <ul className="space-y-2.5">
-                            {[
-                                { name: t('nav.home'), path: "/" },
-                                { name: t('nav.book_seva'), path: "/sevas" },
-                                { name: t('nav.my_bookings'), path: "/bookings" },
-                                { name: t('footer.privacy_policy'), path: "#" },
-                                { name: t('footer.terms_service'), path: "#" }
-                            ].map((link, idx) => (
+                            {quickLinks.map((link, idx) => (
                                 <li key={idx}>
                                     <Link
                                         to={link.path}

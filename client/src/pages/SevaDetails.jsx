@@ -28,12 +28,16 @@ const SevaDetails = () => {
         guestPhone: ''
     });
 
+    const [errors, setErrors] = useState({
+        name: false,
+        guestPhone: false
+    });
+
     // Date State
     const today = new Date().toISOString().split('T')[0];
     const [selectedDate, setSelectedDate] = useState(today);
 
     // Pricing State
-    const [bookingType, setBookingType] = useState('individual');
     const [count, setCount] = useState(1);
     const [total, setTotal] = useState(0);
 
@@ -58,6 +62,20 @@ const SevaDetails = () => {
                 setLoading(false);
             }
         };
+
+        // Check for pre-filled data from lookup
+        const savedData = sessionStorage.getItem('prefill_booking');
+        if (savedData) {
+            try {
+                const parsed = JSON.parse(savedData);
+                setFormData(prev => ({ ...prev, ...parsed }));
+                sessionStorage.removeItem('prefill_booking');
+                toast.success('Continuing with your saved details!');
+            } catch (error) {
+                console.error('Failed to parse prefill data:', error);
+            }
+        }
+
         if (id) {
             fetchSeva();
         } else {
@@ -68,8 +86,40 @@ const SevaDetails = () => {
 
 
     const handleFormChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
+        // Clear error when user starts typing
+        if (errors[name]) {
+            setErrors(prev => ({ ...prev, [name]: false }));
+        }
     };
+
+    // Auto-populate data based on phone number
+    useEffect(() => {
+        const autoPopulate = async () => {
+            if (formData.guestPhone && formData.guestPhone.length === 10) {
+                try {
+                    const { data } = await api.get(`/bookings/track/${formData.guestPhone}`);
+                    if (data && data.length > 0) {
+                        const latest = data[0];
+                        setFormData(prev => ({
+                            ...prev,
+                            name: latest.devoteeName || prev.name,
+                            gothram: latest.gothram || prev.gothram,
+                            rashi: latest.rashi || prev.rashi,
+                            nakshatra: latest.nakshatra || prev.nakshatra,
+                            guestName: latest.guestName || prev.guestName,
+                            guestEmail: latest.guestEmail || prev.guestEmail
+                        }));
+                        toast.success('We found your previous details! Form auto-populated.');
+                    }
+                } catch (error) {
+                    console.error('Failed to auto-populate:', error);
+                }
+            }
+        };
+        autoPopulate();
+    }, [formData.guestPhone]);
 
     const handlePayment = async () => {
         // if (!isAuthenticated) {
@@ -78,16 +128,26 @@ const SevaDetails = () => {
         //     return;
         // }
 
-        if (!formData.name || !formData.gothram || !formData.rashi || !formData.nakshatra) {
-            toast.error('Please fill in all Sankalpa details');
-            return;
-        }
+        const newErrors = {
+            name: !formData.name,
+            guestPhone: !isAuthenticated && !formData.guestPhone
+        };
 
-        if (!isAuthenticated) {
-            if (!formData.guestName || !formData.guestEmail || !formData.guestPhone) {
-                toast.error('Please fill in your contact details');
-                return;
-            }
+        setErrors(newErrors);
+
+        if (newErrors.name || newErrors.guestPhone) {
+            toast.error('Please fill all mandatory fields');
+
+            // Focus the first error field
+            const firstError = newErrors.name ? 'name' : 'guestPhone';
+            setTimeout(() => {
+                const element = document.getElementsByName(firstError)[0];
+                if (element) {
+                    element.focus();
+                    element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }, 100);
+            return;
         }
 
         try {
@@ -97,11 +157,8 @@ const SevaDetails = () => {
                 gothram: formData.gothram,
                 rashi: formData.rashi,
                 nakshatra: formData.nakshatra,
-                bookingType,
-                count: bookingType === 'individual' ? count : 1, // Logic handled in backend/model
-                totalAmount: total,
-                guestName: formData.guestName,
-                guestEmail: formData.guestEmail,
+                bookingType: 'individual',
+                count: count,
                 totalAmount: total,
                 guestName: formData.guestName,
                 guestEmail: formData.guestEmail,
@@ -204,6 +261,7 @@ const SevaDetails = () => {
                                 isAuthenticated={isAuthenticated}
                                 selectedDate={selectedDate}
                                 setSelectedDate={setSelectedDate}
+                                errors={errors}
                             />
                         </div>
                     </div>
@@ -213,8 +271,6 @@ const SevaDetails = () => {
                         <div className="sticky top-24 space-y-6 form-wrapper">
                             <PricingWidget
                                 basePrice={seva.price}
-                                bookingType={bookingType}
-                                setBookingType={setBookingType}
                                 count={count}
                                 setCount={setCount}
                                 total={total}
