@@ -67,17 +67,6 @@ const Navbar = () => {
                                 {t('nav.book_seva')}
                             </Link>
 
-                            {isAuthenticated && user?.role === 'admin' && (
-                                <Link
-                                    to="/bookings"
-                                    className={`px-3 xl:px-4 py-2 rounded-full text-xs xl:text-sm font-bold transition-all ${location.pathname === '/bookings'
-                                        ? 'bg-orange-600 text-white shadow-md shadow-orange-200'
-                                        : 'text-gray-600 hover:bg-orange-50 hover:text-orange-600'
-                                        }`}
-                                >
-                                    {t('nav.my_bookings')}
-                                </Link>
-                            )}
 
                             {isAuthenticated && user?.role === 'admin' && (
                                 <Link
@@ -189,24 +178,13 @@ const Navbar = () => {
                                 {t('nav.book_seva')}
                             </Link>
 
-                            {isAuthenticated && user?.role === 'admin' && (
-                                <>
-                                    <Link
-                                        to="/bookings"
-                                        onClick={() => setIsOpen(false)}
-                                        className="block px-3 py-2 text-gray-700 font-bold"
-                                    >
-                                        {t('nav.my_bookings')}
-                                    </Link>
-                                    <button
-                                        onClick={handleLogout}
-                                        className="w-full text-left px-3 py-2 text-red-600 font-bold flex items-center"
-                                    >
-                                        <LogOut className="w-4 h-4 mr-2" />
-                                        {t('nav.logout')}
-                                    </button>
-                                </>
-                            )}
+                            <button
+                                onClick={handleLogout}
+                                className="w-full text-left px-3 py-2 text-red-600 font-bold flex items-center"
+                            >
+                                <LogOut className="w-4 h-4 mr-2" />
+                                {t('nav.logout')}
+                            </button>
                         </div>
                     </div>
                 )

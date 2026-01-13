@@ -126,15 +126,6 @@ const Dashboard = () => {
                         <p className="text-sm text-gray-500">Create a new booking</p>
                     </div>
                 </Link>
-                <Link to="/bookings" className="flex items-center p-6 bg-white rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow group">
-                    <div className="p-3 bg-purple-50 text-purple-600 rounded-xl group-hover:bg-purple-600 group-hover:text-white transition-colors">
-                        <Calendar className="w-6 h-6" />
-                    </div>
-                    <div className="ml-4">
-                        <h3 className="font-bold text-gray-900">{t('nav.my_bookings', 'My Bookings')}</h3>
-                        <p className="text-sm text-gray-500">View your personal bookings</p>
-                    </div>
-                </Link>
             </div>
 
             <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
