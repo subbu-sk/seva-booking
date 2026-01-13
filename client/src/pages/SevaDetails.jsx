@@ -94,32 +94,6 @@ const SevaDetails = () => {
         }
     };
 
-    // Auto-populate data based on phone number
-    useEffect(() => {
-        const autoPopulate = async () => {
-            if (formData.guestPhone && formData.guestPhone.length === 10) {
-                try {
-                    const { data } = await api.get(`/bookings/track/${formData.guestPhone}`);
-                    if (data && data.length > 0) {
-                        const latest = data[0];
-                        setFormData(prev => ({
-                            ...prev,
-                            name: latest.devoteeName || prev.name,
-                            gothram: latest.gothram || prev.gothram,
-                            rashi: latest.rashi || prev.rashi,
-                            nakshatra: latest.nakshatra || prev.nakshatra,
-                            guestName: latest.guestName || prev.guestName,
-                            guestEmail: latest.guestEmail || prev.guestEmail
-                        }));
-                        toast.success('We found your previous details! Form auto-populated.');
-                    }
-                } catch (error) {
-                    console.error('Failed to auto-populate:', error);
-                }
-            }
-        };
-        autoPopulate();
-    }, [formData.guestPhone]);
 
     const handlePayment = async () => {
         // if (!isAuthenticated) {

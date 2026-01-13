@@ -53,110 +53,108 @@ const BookingLookupModal = ({ isOpen, onClose, bookings, phone }) => {
 
     return (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-300">
-            <div className="bg-gray-50 rounded-3xl w-full max-w-4xl max-h-[90vh] overflow-hidden shadow-2xl border border-white/20 flex flex-col animate-in zoom-in-95 duration-300">
-                {/* Header */}
-                <div className="p-6 bg-white border-b border-gray-100 flex justify-between items-center bg-gradient-to-r from-orange-50 to-white">
-                    <div>
-                        <h2 className="text-2xl font-black text-gray-900 tracking-tight">Your Bookings</h2>
-                        <p className="text-sm text-gray-500 font-medium">Found {bookings.length} records for {phone}</p>
-                    </div>
-                    <button
-                        onClick={onClose}
-                        className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-gray-400 hover:text-orange-600 hover:rotate-90 transition-all shadow-sm border border-gray-100"
-                    >
-                        <X className="w-5 h-5" />
-                    </button>
-                </div>
+            <div className="bg-white rounded-[2rem] w-full max-w-md overflow-hidden shadow-2xl border border-orange-100 flex flex-col animate-in zoom-in-95 duration-300 relative">
+                {/* Close Button */}
+                <button
+                    onClick={onClose}
+                    className="absolute top-4 right-4 w-10 h-10 bg-white/80 backdrop-blur-md rounded-full flex items-center justify-center text-gray-400 hover:text-orange-600 hover:rotate-90 transition-all shadow-sm border border-gray-100 z-20"
+                >
+                    <X className="w-5 h-5" />
+                </button>
 
                 {/* Content */}
-                <div className="flex-1 overflow-y-auto p-6 md:p-8">
-                    {bookings.length === 0 ? (
-                        <div className="text-center py-20 bg-white rounded-2xl border border-dashed border-gray-200">
-                            <div className="w-20 h-20 bg-orange-50 text-orange-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <Calendar className="w-10 h-10 opacity-40" />
-                            </div>
-                            <h3 className="text-xl font-bold text-gray-800">No Bookings Found</h3>
-                            <p className="text-gray-500 max-w-xs mx-auto mt-2 font-medium">We couldn't find any seva bookings associated with this mobile number.</p>
+                {bookings.length === 0 ? (
+                    <div className="p-12 text-center">
+                        <div className="w-20 h-20 bg-orange-50 text-orange-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <Calendar className="w-10 h-10 opacity-40" />
                         </div>
-                    ) : (
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            {bookings.map((booking) => (
-                                <div key={booking._id} className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-xl hover:border-orange-100 transition-all group relative overflow-hidden">
-                                    <div className="absolute top-0 right-0 w-24 h-24 bg-orange-50 rounded-bl-full -mr-12 -mt-12 transition-transform group-hover:scale-150 duration-500 opacity-50"></div>
+                        <h3 className="text-xl font-bold text-gray-800">No Bookings Found</h3>
+                        <p className="text-gray-500 mt-2 font-medium">We couldn't find any seva bookings associated with this mobile number.</p>
+                    </div>
+                ) : (
+                    <>
+                        {/* Decorative Background */}
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-orange-50 rounded-bl-full -mr-12 -mt-12 opacity-50 z-0"></div>
 
-                                    <div className="relative z-10">
-                                        <div className="flex justify-between items-start mb-4">
-                                            <div className="bg-orange-100 text-orange-600 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">
-                                                {booking.status}
-                                            </div>
-                                            <span className="text-[10px] font-mono font-bold text-gray-400 uppercase tracking-tighter">#{booking._id.slice(-6).toUpperCase()}</span>
-                                        </div>
-
-                                        <h4 className="text-lg font-bold text-gray-900 mb-1 group-hover:text-orange-600 transition-colors">
-                                            {booking.seva?.titleEn || 'Seva'}
-                                        </h4>
-                                        <p className="text-xs text-gray-500 mb-4 flex items-center">
-                                            <MapPin className="w-3 h-3 mr-1" />
-                                            {booking.seva?.templeNameEn || 'Temple Name'}
-                                        </p>
-
-                                        <div className="space-y-2 border-t border-gray-50 pt-4 mb-6">
-                                            <div className="flex justify-between text-xs">
-                                                <span className="text-gray-400 font-medium">Devotee</span>
-                                                <span className="font-bold text-gray-700">{booking.devoteeName}</span>
-                                            </div>
-                                            <div className="flex justify-between text-xs">
-                                                <span className="text-gray-400 font-medium">Gothram</span>
-                                                <span className="font-bold text-gray-700">{booking.gothram || 'N/A'}</span>
-                                            </div>
-                                            <div className="flex justify-between text-xs">
-                                                <span className="text-gray-400 font-medium">Rashi / Nakshatra</span>
-                                                <span className="font-bold text-gray-700">{booking.rashi || '-'} / {booking.nakshatra || '-'}</span>
-                                            </div>
-                                            <div className="flex justify-between text-xs">
-                                                <span className="text-gray-400 font-medium">Date</span>
-                                                <span className="font-bold text-gray-700">{new Date(booking.bookingDate).toLocaleDateString()}</span>
-                                            </div>
-                                            <div className="flex justify-between text-xs items-center">
-                                                <span className="text-gray-400 font-medium">Amount</span>
-                                                <span className="text-lg font-black text-orange-600">₹{booking.totalAmount}</span>
-                                            </div>
-                                        </div>
-
-                                        <div className="flex flex-col gap-2">
-                                            <button
-                                                onClick={() => {
-                                                    sessionStorage.setItem('prefill_booking', JSON.stringify({
-                                                        name: booking.devoteeName,
-                                                        gothram: booking.gothram,
-                                                        rashi: booking.rashi,
-                                                        nakshatra: booking.nakshatra,
-                                                        guestName: booking.guestName,
-                                                        guestEmail: booking.guestEmail,
-                                                        guestPhone: phone
-                                                    }));
-                                                    onClose();
-                                                    // Redirect directly to the specific seva page
-                                                    const sevaId = booking.seva?._id || booking.seva;
-                                                    window.location.href = `/sevas/${sevaId}`;
-                                                }}
-                                                className="w-full py-3 bg-gray-900 text-white rounded-xl text-xs font-bold flex items-center justify-center hover:bg-orange-600 transition-all shadow-md group-hover:shadow-orange-100"
-                                            >
-                                                <ExternalLink className="w-4 h-4 mr-2" />
-                                                Book Again with these details
-                                            </button>
-                                        </div>
+                        <div className="p-8 relative z-10">
+                            {/* Header Info */}
+                            <div className="mb-8">
+                                <div className="flex justify-between items-center mb-6">
+                                    <div className="bg-orange-100 text-orange-600 px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest">
+                                        {bookings[0].status}
                                     </div>
+                                    <span className="text-xs font-mono font-bold text-gray-400 uppercase tracking-widest">
+                                        #{bookings[0]._id.slice(-6).toUpperCase()}
+                                    </span>
                                 </div>
-                            ))}
-                        </div>
-                    )}
-                </div>
+                                <h2 className="text-3xl font-black text-gray-900 mb-2 leading-tight">
+                                    {bookings[0].seva?.titleEn || 'Seva'}
+                                </h2>
+                                <p className="text-base text-gray-500 flex items-center font-medium">
+                                    <MapPin className="w-5 h-5 mr-2 text-orange-500" />
+                                    {bookings[0].seva?.templeNameEn || 'Temple Name'}
+                                </p>
+                            </div>
 
-                {/* Footer */}
-                <div className="p-4 bg-white border-t border-gray-100 text-center">
-                    <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">May the blessings of the almighty be with you</p>
-                </div>
+                            {/* Details List */}
+                            <div className="space-y-4 border-t border-gray-100 pt-8 mb-10">
+                                <div className="flex justify-between text-sm">
+                                    <span className="text-gray-400 font-bold uppercase tracking-wider text-[10px]">Devotee</span>
+                                    <span className="font-bold text-gray-800">{bookings[0].devoteeName}</span>
+                                </div>
+                                <div className="flex justify-between text-sm">
+                                    <span className="text-gray-400 font-bold uppercase tracking-wider text-[10px]">Gothram</span>
+                                    <span className="font-bold text-gray-800">{bookings[0].gothram || 'N/A'}</span>
+                                </div>
+                                <div className="flex justify-between text-sm">
+                                    <span className="text-gray-400 font-bold uppercase tracking-wider text-[10px]">Rashi / Nakshatra</span>
+                                    <span className="font-bold text-gray-800">
+                                        {bookings[0].rashi || '-'} / {bookings[0].nakshatra || '-'}
+                                    </span>
+                                </div>
+                                <div className="flex justify-between text-sm">
+                                    <span className="text-gray-400 font-bold uppercase tracking-wider text-[10px]">Booking Date</span>
+                                    <span className="font-bold text-gray-800">
+                                        {new Date(bookings[0].bookingDate).toLocaleDateString()}
+                                    </span>
+                                </div>
+                                <div className="flex justify-between items-center pt-4 border-t border-gray-100 mt-4">
+                                    <span className="text-gray-400 font-bold uppercase tracking-wider text-[10px]">Total Amount</span>
+                                    <span className="text-3xl font-black text-orange-600">₹{bookings[0].totalAmount}</span>
+                                </div>
+                            </div>
+
+                            {/* Action Button */}
+                            <button
+                                onClick={() => {
+                                    sessionStorage.setItem('prefill_booking', JSON.stringify({
+                                        name: bookings[0].devoteeName,
+                                        gothram: bookings[0].gothram,
+                                        rashi: bookings[0].rashi,
+                                        nakshatra: bookings[0].nakshatra,
+                                        guestName: bookings[0].guestName,
+                                        guestEmail: bookings[0].guestEmail,
+                                        guestPhone: phone
+                                    }));
+                                    onClose();
+                                    const sevaId = bookings[0].seva?._id || bookings[0].seva;
+                                    window.location.href = `/sevas/${sevaId}`;
+                                }}
+                                className="w-full py-5 bg-orange-600 text-white rounded-[1.25rem] text-base font-black flex items-center justify-center hover:bg-orange-700 transition-all shadow-xl shadow-orange-100 active:scale-[0.98] group"
+                            >
+                                <ExternalLink className="w-6 h-6 mr-2 group-hover:scale-110 transition-transform" />
+                                Book Again Now
+                            </button>
+                        </div>
+
+                        {/* Blessing Note */}
+                        <div className="p-4 bg-orange-50/50 text-center border-t border-orange-100/50">
+                            <p className="text-[10px] text-orange-400 font-black uppercase tracking-[0.2em]">
+                                May the blessings be with you
+                            </p>
+                        </div>
+                    </>
+                )}
             </div>
         </div>
     );

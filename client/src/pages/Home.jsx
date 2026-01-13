@@ -60,24 +60,12 @@ const Home = () => {
             <section className="px-4 mb-8 pt-6">
                 <HeroCarousel />
                 <div className="-mt-8 relative z-10 space-y-4">
-                    {/* Simplified Track Booking Search */}
-                    <div className="max-w-4xl mx-auto">
-                        <form onSubmit={handleTrackBooking} className="bg-white p-2 md:p-3 rounded-3xl shadow-xl border border-gray-100 flex flex-col md:flex-row items-center gap-2">
-                            <div className="flex-1 flex items-center px-4 w-full">
-                                <Phone className="text-orange-600 w-5 h-5 mr-3" />
-                                <input
-                                    type="tel"
-                                    placeholder="Enter Mobile Number"
-                                    className="w-full py-3 outline-none text-gray-700 font-medium placeholder:text-gray-400"
-                                    value={trackPhone}
-                                    onChange={(e) => setTrackPhone(e.target.value)}
-                                />
-                                {isTracking && <Loader2 className="w-5 h-5 animate-spin text-orange-600 ml-2" />}
-                            </div>
-                        </form>
-                    </div>
-
-                    <SearchBar />
+                    <SearchBar
+                        value={trackPhone}
+                        onChange={setTrackPhone}
+                        onSearch={(val) => navigate('/sevas', { state: { search: val } })}
+                        isTracking={isTracking}
+                    />
                 </div>
             </section>
 

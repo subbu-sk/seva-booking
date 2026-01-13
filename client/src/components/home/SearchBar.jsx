@@ -1,30 +1,35 @@
 import React, { useState } from 'react';
-import { Search } from 'lucide-react';
+import { Search, Loader2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-const SearchBar = () => {
+const SearchBar = ({
+    value,
+    onChange,
+    onSearch,
+    isTracking
+}) => {
     const { t } = useTranslation();
-    const [searchTerm, setSearchTerm] = useState('');
     const navigate = useNavigate();
 
-    const handleSearch = (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
-        navigate('/sevas', { state: { search: searchTerm } });
+        onSearch(value);
     };
 
     return (
-        <form onSubmit={handleSearch} className="max-w-4xl mx-auto">
-            <div className="bg-white p-2 md:p-4 rounded-3xl shadow-2xl border border-orange-100 flex flex-col md:flex-row items-center gap-4">
+        <div className="max-w-4xl mx-auto">
+            <form onSubmit={handleSubmit} className="bg-white p-2 md:p-4 rounded-3xl shadow-2xl border border-orange-100 flex flex-col md:flex-row items-center gap-4">
                 <div className="flex-1 flex items-center px-4 w-full">
                     <Search className="text-orange-600 w-6 h-6 mr-3" />
                     <input
                         type="text"
-                        placeholder={t('home.search_placeholder')}
+                        placeholder={t('home.search_placeholder') || "Search for Seva or Mobile Number"}
                         className="w-full py-3 outline-none text-gray-700 font-medium placeholder:text-gray-400"
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
+                        value={value}
+                        onChange={(e) => onChange(e.target.value)}
                     />
+                    {isTracking && <Loader2 className="w-5 h-5 animate-spin text-orange-600 ml-2" />}
                 </div>
                 <button
                     type="submit"
@@ -32,8 +37,13 @@ const SearchBar = () => {
                 >
                     {t('home.find_btn')}
                 </button>
-            </div>
-        </form>
+            </form>
+
+            {/* Instructional Note */}
+            <p className="mt-4 text-center text-gray-500 text-sm font-medium animate-pulse">
+                ✨ Search for a Seva or enter your mobile number to book again using your previous details
+            </p>
+        </div>
     );
 };
 
