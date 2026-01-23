@@ -11,6 +11,7 @@ const settingsSchema = mongoose.Schema({
     ritualHours: { type: String, default: '06:00 AM - 08:00 PM' },
     allowSameDayBooking: { type: Boolean, default: true },
     notifyDevotee: { type: Boolean, default: true },
+    upiId: { type: String, default: 'yourname@upi' },
     bookingPreferences: {
         advanceBookingDays: {
             type: Number,
